@@ -37,7 +37,7 @@ monserveur.get("/login", (req, res) => {
 
 monserveur.get("/test", (req, res) => {
     console.log("testing route /test");
-    res.status(200).send("test route/test OK");
+    res.status(200).send("test route/test OK!");
 });
 
 https.createServer(options, monserveur).listen(PORT, () => {
