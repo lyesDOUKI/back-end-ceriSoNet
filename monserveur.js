@@ -6,13 +6,10 @@ const file = require("fs");
 const fs = require("fs");
 const https = require("https");
 const PATH_TO_HTML = process.env.PATH_TO_HTML;
-const HTML = process.env.HTML;
 const options = {
     key: fs.readFileSync(process.env.KEY),
     cert: fs.readFileSync(process.env.CERTIFICATE),
 };
-
-monserveur.use(express.static(__dirname + PATH_TO_HTML));
 
 monserveur.all("/", (req, res) => {
     console.log("redirection vers /login pour le formulaire de connexion");
@@ -21,12 +18,21 @@ monserveur.all("/", (req, res) => {
 
 monserveur.get("/login", (req, res) => {
     
-    res.sendFile(__dirname + PATH_TO_HTML + HTML)
+    file.readFile(PATH_TO_HTML, "utf8", (err) => {
+        if (err)
+        {
+            res.status(500).send("erreur serveur lors de la lecture du fichier html");
+            return;
+        }
+        console.log("lecture index.html OK");
+        res.status(200).sendFile(PATH_TO_HTML);
+    });
+
     if(req.query.username && req.query.password){
         const username = req.query.username;
         const password = req.query.password;
-        console.log("username : ", username);
-        console.log("password : ", password);
+        console.log("username : ", JSON.stringify(username));
+        console.log("password : ", JSON.stringify(password));
     }
 });
 
@@ -35,6 +41,7 @@ monserveur.get("/test", (req, res) => {
     res.status(200).send("test route/test OK!");
 });
 
+monserveur.use(express.static(process.env.ROOT));
 
 https.createServer(options, monserveur).listen(PORT, () => {
     console.log("Le serveur est lancé sur le port : ", PORT);
