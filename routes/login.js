@@ -18,6 +18,7 @@ loginRouter.get("/login", (req, res) => {
 loginRouter.post('/login', (req,res) => {
 
     if(req.body.username && req.body.password){
+        console.log("données saisies : ");
         const username = req.body.username;
         const password = req.body.password;
         console.log("username : ", username);
