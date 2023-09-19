@@ -13,7 +13,10 @@ const options = {
 const configSession = require('./db/mongo/session.js');
 const session = require('express-session');
 monserveur.use(session(configSession));
+const cors = require('cors');
 ////////////////////////////////////////////////////////////////////////////////
+//
+monserveur.use(cors());
 monserveur.use('login',express.static(process.env.ROOT));
 monserveur.get("/", (req, res) => {
     console.log("connected : ", loginRoutes.isConnected());
