@@ -10,6 +10,9 @@ const options = {
     key: fs.readFileSync(process.env.KEY),
     cert: fs.readFileSync(process.env.CERTIFICATE),
 };
+const configSession = require('./db/mongo/session.js');
+const session = require('express-session');
+monserveur.use(session(configSession));
 ////////////////////////////////////////////////////////////////////////////////
 monserveur.use('login',express.static(process.env.ROOT));
 monserveur.get("/", (req, res) => {
@@ -24,6 +27,7 @@ monserveur.get("/", (req, res) => {
 monserveur.use(bodyParser.urlencoded({ extended : true}));
 monserveur.use(bodyParser.json());
 monserveur.use(loginRoutes.loginRouter);
+
 https.createServer(options, monserveur).listen(PORT, () => {
     console.log("Le serveur est lancé sur le port : ", PORT);
 });

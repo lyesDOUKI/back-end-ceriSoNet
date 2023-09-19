@@ -5,6 +5,7 @@ const file = require("fs");
 var username = "";
 var password = "";
 var connect = false;
+const userDao = require('../db/postgree/userDAO.js');
 loginRouter.get("/login", (req, res) => {
     file.readFile(PATH_TO_HTML, "utf8", (err) => {
         if (err)
@@ -20,7 +21,7 @@ loginRouter.get("/login", (req, res) => {
 
 loginRouter.post('/login', (req,res) => {
 
-    if(req.body.username && req.body.password){
+    /*if(req.body.username && req.body.password){
         console.log("données saisies : ");
         connect = true;
         username = req.body.username;
@@ -32,6 +33,27 @@ loginRouter.post('/login', (req,res) => {
         }, 500);
     }else{
 	    console.log("données non saisie");
+    }*/
+    if(req.body.username && req.body.password)
+    {
+    userDao.getUser(req)
+    .then(({ connect, response }) => {
+        if (connect) {
+            console.log("Connexion réussie : ", response.statusMsg);
+            if (response.data) {
+                res.send(response);
+            }
+        } else {
+            console.log("Connexion échouée");
+        }
+    })
+    .catch(({ connect, response }) => {
+        if (connect && response) {
+            console.error(response.statusMsg);
+        } else {
+            console.error("Erreur de connexion");
+        }
+    });
     }
 });
 function isConnected(){
