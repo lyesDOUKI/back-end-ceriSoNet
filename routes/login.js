@@ -45,6 +45,7 @@ loginRouter.post('/login', (req,res) => {
             }
         } else {
             console.log("Connexion échouée");
+            res.status(404).send(response);
         }
     })
     .catch(({ connect, response }) => {

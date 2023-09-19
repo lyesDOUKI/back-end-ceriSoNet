@@ -22,13 +22,13 @@ function getUser(request) {
 
                     if (err) {
                         console.log("Erreur d’exécution de la requete" + err.stack);
-                        reject({ connect: true, response: { statusMsg: "Connexion échouée" } });
+                        reject({ connect: false, response: { statusMsg: "Connexion échouée" } });
                     } else if (result.rows[0] != null && result.rows[0].motpasse == sha1(request.body.password)) {
                         request.session.isConnected = true;
                         resolve({ connect: true, response: { data: result.rows[0].nom, statusMsg: 'Connexion réussie : bonjour ' + result.rows[0].prenom } });
                     } else {
                         console.log('Connexion échouée : informations de connexion incorrecte');
-                        reject({ connect: true, response: { statusMsg: "Connexion échouée : informations de connexion incorrecte" } });
+                        resolve({ connect: false, response: { statusMsg: "Connexion échouée : informations de connexion incorrecte" } });
                     }
                 });
             }
