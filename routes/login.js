@@ -39,13 +39,13 @@ loginRouter.post('/login', (req,res) => {
     userDao.getUser(req)
     .then(({ connect, response }) => {
         if (connect) {
-            console.log("Connexion réussie : ", response.statusMsg);
-            if (response.data) {
-                res.send(response);
+            console.log("Connexion réussie : ", response);
+            if (response) {
+                res.status(200).send(response);
             }
         } else {
             console.log("Connexion échouée");
-            res.status(404).send(response);
+            res.status(404).send("aucun utilisateur trouvé pour l'utilisateur : " + req.body.username);
         }
     })
     .catch(({ connect, response }) => {

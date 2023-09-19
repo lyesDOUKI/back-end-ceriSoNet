@@ -25,10 +25,17 @@ function getUser(request) {
                         reject({ connect: false, response: { statusMsg: "Connexion échouée" } });
                     } else if (result.rows[0] != null && result.rows[0].motpasse == sha1(request.body.password)) {
                         request.session.isConnected = true;
-                        resolve({ connect: true, response: { data: result.rows[0].nom, statusMsg: 'Connexion réussie : bonjour ' + result.rows[0].prenom } });
+                        const data = result.rows[0];
+                        resolve({ connect: true, response: {
+                            identifiant: result.rows[0].identifiant,
+                            nom: result.rows[0].nom,
+                            prenom: result.rows[0].prenom,
+                            avatar: result.rows[0].avatar,
+                            statut_connexion: result.rows[0].statut_connexion
+                        }  });
                     } else {
                         console.log('Connexion échouée : informations de connexion incorrecte');
-                        resolve({ connect: false, response: { statusMsg: "Connexion échouée : informations de connexion incorrecte" } });
+                        resolve({ connect: false, response: null });
                     }
                 });
             }
