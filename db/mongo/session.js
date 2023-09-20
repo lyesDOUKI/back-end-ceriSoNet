@@ -8,8 +8,8 @@ const sessionConfig = {
     store : new MongoDBStore({ 
         uri: process.env.MONGO_SESSION, 
         collection: process.env.SESSION,
-        touchAfter: 24 * 3600 
+        touchAfter: 24 * 3600
     }),
     cookie : {maxAge : 24 * 3600 * 1000} 
 };
-module.exports = sessionConfig
+module.exports = sessionConfig;

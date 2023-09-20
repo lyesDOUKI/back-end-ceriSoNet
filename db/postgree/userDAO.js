@@ -25,7 +25,7 @@ function getUser(request) {
                         reject({ connect: false, response: { statusMsg: "Connexion échouée" } });
                     } else if (result.rows[0] != null && result.rows[0].motpasse == sha1(request.body.password)) {
                         request.session.isConnected = true;
-                        const data = result.rows[0];
+                        request.session.lastLogin = new Date().toISOString();
                         resolve({ connect: true, response: {
                             identifiant: result.rows[0].identifiant,
                             nom: result.rows[0].nom,

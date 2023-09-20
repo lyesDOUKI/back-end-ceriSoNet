@@ -2,9 +2,7 @@ const express = require('express');
 const loginRouter = express.Router();
 const PATH_TO_HTML = process.env.PATH_TO_HTML;
 const file = require("fs");
-var username = "";
-var password = "";
-var connect = false;
+
 const userDao = require('../db/postgree/userDAO.js');
 loginRouter.get("/login", (req, res) => {
     file.readFile(PATH_TO_HTML, "utf8", (err) => {
@@ -41,6 +39,8 @@ loginRouter.post('/login', (req,res) => {
         if (connect) {
             console.log("Connexion réussie : ", response);
             if (response) {
+                
+                req.session.username = req.body.username;
                 res.status(200).send(response);
             }
         } else {
@@ -57,12 +57,6 @@ loginRouter.post('/login', (req,res) => {
     });
     }
 });
-function isConnected(){
-    return connect;
-}
-function getUsername(){
-    return username;
-}
-module.exports = {loginRouter,
-                isConnected,
-                 getUsername};
+
+
+module.exports = {loginRouter};
