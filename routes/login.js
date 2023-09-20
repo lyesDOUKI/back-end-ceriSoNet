@@ -18,20 +18,6 @@ loginRouter.get("/login", (req, res) => {
 
 
 loginRouter.post('/login', (req,res) => {
-
-    /*if(req.body.username && req.body.password){
-        console.log("données saisies : ");
-        connect = true;
-        username = req.body.username;
-        password = req.body.password;
-        console.log("username : ", username);
-        console.log("password : ", password);    
-        setTimeout(() => {
-            res.redirect('/');
-        }, 500);
-    }else{
-	    console.log("données non saisie");
-    }*/
     if(req.body.username && req.body.password)
     {
     userDao.getUser(req)
