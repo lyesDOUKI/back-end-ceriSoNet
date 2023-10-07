@@ -13,12 +13,17 @@ const options = {
 const dateUtils = require("./utils/date.js");
 const configSession = require('./db/mongo/session.js');
 const session = require('express-session');
-
 monserveur.use(session(configSession));
-const cors = require('cors');
+monserveur.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://192.168.2.13:3206');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // Permet l'envoi de cookies
+  next();
+});
 ////////////////////////////////////////////////////////////////////////////////
 //
-monserveur.use(cors());
+
 monserveur.use('login',express.static(process.env.ROOT));
 monserveur.get("/", (req, res) => {
     if("isConnected" in req.session){

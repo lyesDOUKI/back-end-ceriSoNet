@@ -3,6 +3,7 @@ const loginRouter = express.Router();
 const PATH_TO_HTML = process.env.PATH_TO_HTML;
 const file = require("fs");
 const userDao = require('../db/postgree/userDAO.js');
+const { stringify } = require('querystring');
 loginRouter.get("/login", (req, res) => {
     file.readFile(PATH_TO_HTML, "utf8", (err) => {
         if (err)
@@ -42,5 +43,22 @@ loginRouter.post('/login', (req,res) => {
     }
 });
 
+loginRouter.post('/logout', (req, res) => {
+    
+   console.log("déconnexion de l'utilisateur : " + req.session.username) 
+   req.session.destroy((err) => {
+       if(err)
+       {
+           console.error("erreur lors de la déconnexion : " + err.stack);
+           res.status(500).send("erreur lors de la déconnexion");
+       }
+       else
+       {
+           console.log("déconnexion réussie");
+           res.status(200).send();
+       }
+   });
+    
+});
 
 module.exports = {loginRouter};

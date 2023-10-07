@@ -10,6 +10,13 @@ const sessionConfig = {
         collection: process.env.SESSION,
         touchAfter: 24 * 3600
     }),
-    cookie : {maxAge : 24 * 3600 * 1000} 
-};
+        cookie : {
+            secure: true,
+            httpOnly: true,
+            maxAge: 24 * 3600 * 1000,
+            sameSite: 'none',
+            path: '/'
+            
+        }
+    };
 module.exports = sessionConfig;

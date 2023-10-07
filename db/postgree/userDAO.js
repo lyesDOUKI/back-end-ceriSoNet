@@ -26,6 +26,7 @@ function getUser(request) {
                     } 
                     else if (result.rows[0] != null && result.rows[0].motpasse == sha1(request.body.password))
                     {
+                        
                         request.session.isConnected = true;
                         request.session.lastLogin = new Date().toISOString();
                         resolve({ connect: true, response: {
@@ -34,7 +35,8 @@ function getUser(request) {
                             prenom: result.rows[0].prenom,
                             avatar: result.rows[0].avatar,
                             statut_connexion: result.rows[0].statut_connexion
-                        }  });
+                             }
+                            });
                     } else {
                         console.log('Connexion échouée : informations de connexion incorrecte');
                         resolve({ connect: false, response: { statusMsg: "Connexion échouée" } });
