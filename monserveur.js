@@ -10,17 +10,26 @@ const options = {
     key: fs.readFileSync(process.env.KEY),
     cert: fs.readFileSync(process.env.CERTIFICATE),
 };
+const cors = require('cors');
 const dateUtils = require("./utils/date.js");
 const configSession = require('./db/mongo/session.js');
 const session = require('express-session');
 monserveur.use(session(configSession));
 monserveur.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://192.168.2.13:3206');
+  res.setHeader('Access-Control-Allow-Origin', 'http://192.168.2.13:3206');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Access-Control-Allow-Credentials', 'true'); // Permet l'envoi de cookies
   next();
 });
+
+const app = https.createServer(options, monserveur);
+
+const io = require('socket.io')(app,
+    {
+        cors : {}
+    });
+monserveur.set('io', io);
 ////////////////////////////////////////////////////////////////////////////////
 //
 
@@ -47,6 +56,7 @@ monserveur.use(bodyParser.urlencoded({ extended : true}));
 monserveur.use(bodyParser.json());
 monserveur.use(loginRoutes.loginRouter);
 
-https.createServer(options, monserveur).listen(PORT, () => {
+
+app.listen(PORT, () => {
     console.log("Le serveur est lancé sur le port : ", PORT);
 });

@@ -3,7 +3,7 @@ const loginRouter = express.Router();
 const PATH_TO_HTML = process.env.PATH_TO_HTML;
 const file = require("fs");
 const userDao = require('../db/postgree/userDAO.js');
-const { stringify } = require('querystring');
+const ws = require('../websockets/wesockets.js');
 loginRouter.get("/login", (req, res) => {
     file.readFile(PATH_TO_HTML, "utf8", (err) => {
         if (err)
@@ -22,6 +22,7 @@ loginRouter.post('/login', (req,res) => {
     {
 	    userDao.getUser(req).then(({ connect, response }) => {
         if (connect) {
+            ws.onLogin(req.app.get('io'), response);
             console.log("Connexion réussie : ", response);
             if (response) {
                 
