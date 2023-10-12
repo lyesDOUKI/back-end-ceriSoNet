@@ -20,6 +20,8 @@ loginRouter.get("/login", (req, res) => {
 loginRouter.post('/login', (req,res) => {
     if(req.body.username && req.body.password)
     {
+        console.log("username : " + req.body.username);
+        console.log("mot de passe : " + req.body.password);
 	    userDao.getUser(req).then(({ connect, response }) => {
         if (connect) {
             ws.onLogin(req.app.get('io'), response);
