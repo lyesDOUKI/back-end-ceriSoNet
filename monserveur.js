@@ -15,6 +15,7 @@ const dateUtils = require("./utils/date.js");
 const configSession = require('./db/mongo/session.js');
 const session = require('express-session');
 monserveur.use(session(configSession));
+//configuration des headers et le cross origin et l'envoi des cookies et sessions
 monserveur.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://192.168.2.13:3206');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
