@@ -3,7 +3,7 @@ const loginRouter = express.Router();
 const PATH_TO_HTML = process.env.PATH_TO_HTML;
 const file = require("fs");
 const userDao = require('../db/postgree/userDAO.js');
-const ws = require('../websockets/wesockets.js');
+const ws = require('../websockets/websockets.js');
 loginRouter.get("/login", (req, res) => {
     file.readFile(PATH_TO_HTML, "utf8", (err) => {
         if (err)
