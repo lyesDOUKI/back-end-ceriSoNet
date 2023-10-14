@@ -3,6 +3,7 @@ const express = require("express");
 const PORT = process.env.PORT;
 const monserveur = express();
 const loginRoutes = require("./routes/login.js");
+const publicationRoute = require('./routes/publication.js');
 const fs = require("fs");
 const https = require("https");
 const bodyParser = require("body-parser");
@@ -11,6 +12,7 @@ const options = {
     cert: fs.readFileSync(process.env.CERTIFICATE),
 };
 const cors = require('cors');
+
 const dateUtils = require("./utils/date.js");
 const configSession = require('./db/mongo/session.js');
 const session = require('express-session');
@@ -56,8 +58,7 @@ monserveur.get("/", (req, res) => {
 monserveur.use(bodyParser.urlencoded({ extended : true}));
 monserveur.use(bodyParser.json());
 monserveur.use(loginRoutes.loginRouter);
-
-
+monserveur.use(publicationRoute.publicationRouter);
 app.listen(PORT, () => {
     console.log("Le serveur est lancé sur le port : ", PORT);
 });
