@@ -1,6 +1,6 @@
 const express = require('express');
 const loginRouter = express.Router();
-const PATH_TO_HTML = process.env.PATH_TO_HTML;
+const PATH_TO_HTML = process.env.ROOT + '/index.html';
 const file = require("fs");
 const userDao = require('../db/postgree/userDAO.js');
 const ws = require('../websockets/websockets.js');
@@ -13,7 +13,7 @@ loginRouter.get("/login", (req, res) => {
         }
         console.log("lecture index.html OK");
         res.status(200).sendFile(PATH_TO_HTML);
-    });
+    }); 
 });
 
 

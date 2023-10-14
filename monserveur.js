@@ -36,7 +36,7 @@ monserveur.set('io', io);
 ////////////////////////////////////////////////////////////////////////////////
 //
 
-monserveur.use('login',express.static(process.env.ROOT));
+monserveur.use(express.static(process.env.ROOT));
 monserveur.get("/", (req, res) => {
     if("isConnected" in req.session){
         if(!req.session.isConnected) {
