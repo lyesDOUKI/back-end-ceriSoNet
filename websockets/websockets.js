@@ -15,4 +15,10 @@ function onLike(io, response)
     console.log("response : " + response);
     io.emit ('like',response);
 }
-module.exports = {onLogin, onLogout, onLike};
+function onComment(io, response)
+{
+    console.log("depuis node :nouvel utilisateur");
+    console.log("response : " + response);
+    io.emit ('comment',response);
+}
+module.exports = {onLogin, onLogout, onLike, onComment};

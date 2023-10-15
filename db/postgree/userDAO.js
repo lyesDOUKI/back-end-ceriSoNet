@@ -26,7 +26,11 @@ function getUser(request) {
                     } 
                     else if (result.rows[0] != null && result.rows[0].motpasse == sha1(request.body.password))
                     {
+                        
                         request.session.isConnected = true;
+                        const id = result.rows[0].id;
+                        request.session.userid = id;
+                        console.log("id user : " + request.session.userid);
                         request.session.lastLogin = new Date().toISOString();
                         resolve({ connect: true, response: {
                             identifiant: result.rows[0].identifiant,
