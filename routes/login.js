@@ -49,6 +49,7 @@ loginRouter.post('/login', (req,res) => {
 loginRouter.post('/logout', (req, res) => {
     
    console.log("déconnexion de l'utilisateur : " + req.session.username) 
+   const tmpUsername = req.session.username;
    req.session.destroy((err) => {
        if(err)
        {
@@ -57,6 +58,7 @@ loginRouter.post('/logout', (req, res) => {
        }
        else
        {
+            ws.onLogout(req.app.get('io'), tmpUsername);
            console.log("déconnexion réussie");
            res.status(200).send();
        }
