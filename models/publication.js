@@ -1,4 +1,5 @@
 class Publication {
+  
     constructor(data) {
       this._id = data._id;
       this.date = data.date;

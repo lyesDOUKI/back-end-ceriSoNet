@@ -9,5 +9,10 @@ function onLogout(io, response)
     console.log("depuis node :nouvel utilisateur");
     io.emit ('logout',response);
 }
-
-module.exports = {onLogin, onLogout};
+function onLike(io, response)
+{
+    console.log("depuis node :nouvel utilisateur");
+    console.log("response : " + response);
+    io.emit ('like',response);
+}
+module.exports = {onLogin, onLogout, onLike};

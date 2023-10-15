@@ -4,6 +4,7 @@ const PORT = process.env.PORT;
 const monserveur = express();
 const loginRoutes = require("./routes/login.js");
 const publicationRoute = require('./routes/publication.js');
+const likesRoute = require('./routes/likes.js');
 const fs = require("fs");
 const https = require("https");
 const bodyParser = require("body-parser");
@@ -59,6 +60,7 @@ monserveur.use(bodyParser.urlencoded({ extended : true}));
 monserveur.use(bodyParser.json());
 monserveur.use(loginRoutes.loginRouter);
 monserveur.use(publicationRoute.publicationRouter);
+monserveur.use(likesRoute.likesRouter);
 app.listen(PORT, () => {
     console.log("Le serveur est lancé sur le port : ", PORT);
 });
