@@ -59,6 +59,7 @@ monserveur.get("/", (req, res) => {
 });
 monserveur.use(bodyParser.urlencoded({ extended : true}));
 monserveur.use(bodyParser.json());
+//ajout des routes
 monserveur.use(loginRoutes.loginRouter);
 monserveur.use(publicationRoute.publicationRouter);
 monserveur.use(likesRoute.likesRouter);
