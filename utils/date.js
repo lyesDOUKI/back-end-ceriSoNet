@@ -1,15 +1,14 @@
 function getHour(date){
     const heure = date.getHours(); 
-    const minute = date.getMinutes(); 
-    const seconde = date.getSeconds(); 
-    return heure + "h" + minute + "m" + seconde + "s";
+    const minute = date.getMinutes();  
+    return heure + ":" + minute;
 }
 
 function getDate(date){
     const jour = date.getDate(); 
-    const mois = date.getMonth(); 
+    const mois = date.getMonth()+1; 
     const annee = date.getFullYear(); 
-    return jour + "/" + mois + "/" + annee;
+    return annee + "-" + mois + "-" + jour;
 }
 
 module.exports = {

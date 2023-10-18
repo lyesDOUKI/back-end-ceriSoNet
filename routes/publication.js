@@ -1,8 +1,10 @@
 const express = require('express');
 const publicationRouter = express.Router();
 const mongodb = require('mongodb').MongoClient;
- const model = require('../models/publication.js');
+const model = require('../models/publication.js');
 const urlMongodb = process.env.URL_MONGO;
+const dateUtils = require('../utils/date.js');
+const ws = require('../websockets/websockets.js');
 publicationRouter.get("/publication", (req, res) => 
 {
     console.log("dans la route publication");
@@ -54,7 +56,7 @@ publicationRouter.get("/publication/:trie/:filtre", (req, res) =>
         if(trie === "date")
         {
             //filtrer par date et hashtag
-                return collection.find({ hashtags: {$in:tableauHashTag} }).sort({date : -1}).toArray().then((data) => {
+                return collection.find({ hashtags: {$in:tableauHashTag} }).sort({date : -1}, {hour : -1}).toArray().then((data) => {
                     const parsedData = data.map((item) => new model.Publication(item));
         
                     console.log("nombre de poste : " + parsedData.length);
@@ -177,6 +179,60 @@ publicationRouter.get("/publication/:trie", (req, res) =>
               });
         }
 
+    });
+    
+});
+publicationRouter.post("/addpost", (req, res) => 
+{
+    console.log("dans la route publication");
+    const mongodbPromise = mongodb.connect(urlMongodb);
+
+    mongodbPromise.then(async (client) =>
+    {
+        if(client)
+        {
+            //console.log(client);
+        }
+        const db = client.db(process.env.NOM_DB);
+        const collection = db.collection(process.env.NOM_COLLECTION);
+        let body = req.body.body;
+        let url = req.body.images;
+        let hashtags = req.body.hashtags;
+        async function getLastId()
+        {
+            let lastId = await collection.findOne({_id : {$type:'number'}}, {sort:{_id:-1}});
+            //console.log("lastId : " + JSON.stringify(lastId));
+            return lastId._id;
+        }
+        let id = 0;
+        id = await getLastId();
+        let date = new Date();
+        let formatDate = dateUtils.getDate(date);
+        let formatHour = dateUtils.getHour(date);
+        let createdBy = req.session.userid;
+        hashtags = hashtags.map(element => {
+            
+            element = "#" + element;
+            return element;
+        });
+        id = Number(id) + 1;
+        console.log("valeur : " + id);
+        return collection.insertOne({
+            _id : id,
+            date : formatDate,
+            hour : formatHour,
+            body : body,
+            createdBy : createdBy,
+            images : {url},
+            likes : 0,
+            hashtags : hashtags,
+            comments : [],
+        }).then((data) => {
+            
+            console.log("poste ajouté");
+            ws.onAddPost(req.app.get('io'), req.session.username);
+            res.json(data);
+        });
     });
     
 });

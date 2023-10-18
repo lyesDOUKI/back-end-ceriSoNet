@@ -21,4 +21,10 @@ function onComment(io, response)
     console.log("response : " + response);
     io.emit ('comment',response);
 }
-module.exports = {onLogin, onLogout, onLike, onComment};
+function onAddPost(io, response)
+{
+    console.log("depuis node :add post");
+    console.log("response : " + response);
+    io.emit ('addPost',response);
+}
+module.exports = {onLogin, onLogout, onLike, onComment, onAddPost};
