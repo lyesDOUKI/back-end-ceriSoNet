@@ -49,7 +49,82 @@ function getUser(request) {
         });
     });
 }
+function setStatutOnline(request) {
+    return new Promise((resolve, reject) => {
+        const sql = "update fredouil.users set statut_connexion = 1 where id=$1;";
+        const connectionObj = new pgClient.Pool({
+            user: process.env.PG_ID,
+            host: process.env.PG_HOST,
+            database: process.env.PG_DB,
+            password: process.env.PG_PWD,
+            port: process.env.PG_PORT
+        });
 
+        connectionObj.connect((err, client, done) => {
+            if (err) {
+                console.log('Error connecting to pg server' + err.stack);
+                reject({ connect: false, response: null });
+            } else {
+                const params = request.session.userid;
+                console.log('Connection established / pg db server');
+                client.query(sql, [params],(err, result) => {
+                    console.log("executing query with params : " + params);
+                    if (err) {
+                        console.log("Erreur lors de l'exécution de la requete sql, vérifiez la syntaxe" + err.stack);
+                        reject({ connect: false, response: { statusMsg: "Connexion échouée" } });
+                    } 
+                    else
+                    {
+                       console.log("statut connexion mis à jour à 1");
+                       resolve({response: {
+                             message : "statut connexion mis à jour à 1"
+                             }
+                            });
+                    } 
+                });
+            }
+        });
+    });
+}
+function setStatutOff(request) {
+    return new Promise((resolve, reject) => {
+        const sql = "update fredouil.users set statut_connexion = 0 where id=$1;";
+        const connectionObj = new pgClient.Pool({
+            user: process.env.PG_ID,
+            host: process.env.PG_HOST,
+            database: process.env.PG_DB,
+            password: process.env.PG_PWD,
+            port: process.env.PG_PORT
+        });
+
+        connectionObj.connect((err, client, done) => {
+            if (err) {
+                console.log('Error connecting to pg server' + err.stack);
+                reject({ connect: false, response: null });
+            } else {
+                const params = request;
+                console.log('Connection established / pg db server');
+                client.query(sql, [params],(err, result) => {
+                    console.log("executing query with params : " + params);
+                    if (err) {
+                        console.log("Erreur lors de l'exécution de la requete sql, vérifiez la syntaxe" + err.stack);
+                        reject({ connect: false, response: { statusMsg: "Connexion échouée" } });
+                    } 
+                    else
+                    {
+                       console.log("statut connexion mis à jour à 0");
+                       resolve({response: {
+                             message : "statut connexion mis à jour à 0"
+                             }
+                            });
+                    } 
+                });
+            }
+        });
+    });
+}
 module.exports = {
-    getUser
+    getUser,
+    setStatutOnline,
+    setStatutOff
 };

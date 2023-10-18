@@ -27,4 +27,9 @@ function onAddPost(io, response)
     console.log("response : " + response);
     io.emit ('addPost',response);
 }
-module.exports = {onLogin, onLogout, onLike, onComment, onAddPost};
+function onFirstConnect(io, response)
+{
+    console.log("depuis node :nouvel utilisateur");
+    io.emit ('firstConnect',response);
+}
+module.exports = {onLogin, onLogout, onLike, onComment, onAddPost, onFirstConnect};

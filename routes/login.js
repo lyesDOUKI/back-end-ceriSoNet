@@ -25,9 +25,13 @@ loginRouter.post('/login', (req,res) => {
 	    userDao.getUser(req).then(({ connect, response }) => {
         if (connect) {
             ws.onLogin(req.app.get('io'), response);
+            ws.onFirstConnect(req.app.get('io'), response);
             console.log("Connexion réussie : ", response);
             if (response) {
-                
+                userDao.setStatutOnline(req).then(({ response }) => {
+                    console.log("statut connexion mis à jour");
+                    
+                });
                 req.session.username = req.body.username;
                 res.status(200).send(response);
             }
@@ -50,6 +54,11 @@ loginRouter.post('/logout', (req, res) => {
     
    console.log("déconnexion de l'utilisateur : " + req.session.username) 
    const tmpUsername = req.session.username;
+   const tmpId = req.session.userid;
+   userDao.setStatutOff(tmpId).then(({ response }) => {
+    console.log("statut connexion mis à jour");
+    
+});
    req.session.destroy((err) => {
        if(err)
        {
@@ -60,6 +69,7 @@ loginRouter.post('/logout', (req, res) => {
        {
             ws.onLogout(req.app.get('io'), tmpUsername);
            console.log("déconnexion réussie");
+           
            res.status(200).send();
        }
    });
