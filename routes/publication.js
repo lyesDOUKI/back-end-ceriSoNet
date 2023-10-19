@@ -288,4 +288,27 @@ publicationRouter.post("/sharepost", (req, res) =>
 
 }
 );
+publicationRouter.get('/post/:p1', (req, res) =>
+{
+    console.log("dans la route publication avec l id " + req.params.p1);
+    const mongodbPromise = mongodb.connect(urlMongodb);
+
+    mongodbPromise.then(client =>
+    {
+        if(client)
+        {
+            //console.log(client);
+        }
+        const db = client.db(process.env.NOM_DB);
+        const collection = db.collection(process.env.NOM_COLLECTION);
+        let id = req.params.p1;
+        id = Number(id);
+        return collection.findOne({_id : id}).then((data) => {
+            const parsedData = new model.Publication(data);
+            console.log("poste trouvé");
+            res.json(parsedData);
+        });
+    });
+}
+);
 module.exports = {publicationRouter};
