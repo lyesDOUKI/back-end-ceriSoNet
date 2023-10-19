@@ -14,7 +14,7 @@ publicationRouter.get("/publication", (req, res) =>
     {
         if(client)
         {
-            console.log(client);
+            //console.log(client);
         }
         const db = client.db(process.env.NOM_DB);
         const collection = db.collection(process.env.NOM_COLLECTION);

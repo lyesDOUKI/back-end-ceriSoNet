@@ -75,5 +75,23 @@ loginRouter.post('/logout', (req, res) => {
    });
     
 });
-
+loginRouter.get('/usersOn', (req, res) => {
+    userDao.getUsersOn().then(({ connect, response }) => {
+        console.log("connecte : " + connect);
+        if (connect) {
+            console.log("liste des utilisateurs connectés : ", response);
+            res.status(200).send(response.users);
+        } else {
+            console.log(response.users);
+            res.status(404).send("aucun utilisateur trouvé");
+        }
+    })
+    .catch(({ connect, response }) => {
+        if (connect && response) {
+            console.error(response.statusMsg);
+        } else {
+            console.error("Erreur de connexion");
+        }
+    });
+})
 module.exports = {loginRouter};
