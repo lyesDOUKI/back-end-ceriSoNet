@@ -6,6 +6,7 @@ class Publication {
       this.hour = data.hour;
       this.body = data.body;
       this.createdBy = data.createdBy;
+      this.shared = data.shared || data.shared;
       this.images = data.images || [];
       this.title = data.title;
       this.likes = data.likes;

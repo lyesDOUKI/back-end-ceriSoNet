@@ -19,7 +19,7 @@ publicationRouter.get("/publication", (req, res) =>
         const db = client.db(process.env.NOM_DB);
         const collection = db.collection(process.env.NOM_COLLECTION);
 
-        return collection.find({}).toArray().then((data) => {
+        return collection.find().toArray().then((data) => {
             const parsedData = data.map((item) => new model.Publication(item));
 
             console.log("nombre de poste : " + parsedData.length);
