@@ -238,7 +238,7 @@ publicationRouter.post("/addpost", (req, res) =>
 });
 publicationRouter.post("/sharepost", (req, res) =>
 {
-    console.log("dans la route publication");
+    console.log("dans la route publication pour partager le post id : " + req.body.postid);
     const mongodbPromise = mongodb.connect(urlMongodb);
 
     mongodbPromise.then(async (client) =>
