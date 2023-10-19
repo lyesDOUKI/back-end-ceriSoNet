@@ -236,4 +236,56 @@ publicationRouter.post("/addpost", (req, res) =>
     });
     
 });
+publicationRouter.post("/sharepost", (req, res) =>
+{
+    console.log("dans la route publication");
+    const mongodbPromise = mongodb.connect(urlMongodb);
+
+    mongodbPromise.then(async (client) =>
+    {
+        if(client)
+        {
+            //console.log(client);
+        }
+        const db = client.db(process.env.NOM_DB);
+        const collection = db.collection(process.env.NOM_COLLECTION);
+        let createdBy = req.session.userid;
+        let image = req.body.imageURL;
+        let hashtags = req.body.hashtags;
+        let date = new Date();
+        let formatDate = dateUtils.getDate(date);
+        let formatHour = dateUtils.getHour(date);
+        let body = req.body.shareText;
+        async function getLastId()
+        {
+            let lastId = await collection.findOne({_id : {$type:'number'}}, {sort:{_id:-1}});
+            //console.log("lastId : " + JSON.stringify(lastId));
+            return lastId._id;
+        }
+        let id = 0;
+        id = await getLastId();
+        id = Number(id) + 1;
+        let postid = req.body.postid;
+        return collection.insertOne({
+            _id : id,
+            date : formatDate,
+            hour : formatHour,
+            body : body,
+            createdBy : createdBy,
+            images : {image},
+            likes : 0,
+            hashtags : hashtags,
+            shared : postid,
+            comments : [],
+        }).then((data) => {
+            
+            console.log("poste partagé");
+            
+            res.json(data);
+        });
+
+    });
+
+}
+);
 module.exports = {publicationRouter};
