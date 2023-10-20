@@ -32,7 +32,7 @@ publicationRouter.get("/publication", (req, res) =>
 //recuperation des données selons critére et filtre
 publicationRouter.get("/publication/:trie/:filtre", (req, res) => 
 {
-    console.log("dans la route publication");
+    console.log("dans la route publication avec tire et filtre");
     const mongodbPromise = mongodb.connect(urlMongodb);
 
     mongodbPromise.then((client) =>

@@ -1,5 +1,6 @@
 const pgClient = require('pg'); 
 const sha1 = require("sha1");
+const dateUtils = require('../../utils/date.js');
 function getUser(request) {
     return new Promise((resolve, reject) => {
         const sql = "select * from fredouil.users where identifiant=$1;";
@@ -32,12 +33,17 @@ function getUser(request) {
                         request.session.userid = id;
                         console.log("id user : " + request.session.userid);
                         request.session.lastLogin = new Date().toISOString();
+                        const date_co = new Date()
+                        const date = dateUtils.getDate(date_co);
+                        const heure = dateUtils.getHour(date_co);
+                        const finalFormat = date + " " + heure;
                         resolve({ connect: true, response: {
                             identifiant: result.rows[0].identifiant,
                             nom: result.rows[0].nom,
                             prenom: result.rows[0].prenom,
                             avatar: result.rows[0].avatar,
-                            statut_connexion: result.rows[0].statut_connexion
+                            statut_connexion: result.rows[0].statut_connexion,
+                             date_co : finalFormat
                              }
                             });
                     } else {
