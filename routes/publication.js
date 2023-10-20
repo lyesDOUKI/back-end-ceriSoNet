@@ -5,6 +5,7 @@ const model = require('../models/publication.js');
 const urlMongodb = process.env.URL_MONGO;
 const dateUtils = require('../utils/date.js');
 const ws = require('../websockets/websockets.js');
+
 publicationRouter.get("/publication", (req, res) => 
 {
     console.log("dans la route publication");

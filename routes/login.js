@@ -16,6 +16,13 @@ loginRouter.get("/login", (req, res) => {
     }); 
 });
 
+loginRouter.get("/getAllUsers", (req, res)=>
+{
+    userDao.getAllUsers(req).then(({ connect, response }) => {
+        res.status(200).send(response.listUser);
+    })
+}   
+);
 
 loginRouter.post('/login', (req,res) => {
     if(req.body.username && req.body.password)

@@ -170,9 +170,51 @@ function getUsersOn(request)
         });
     });
 }
+function getAllUsers(req)
+{
+    return new Promise((resolve, reject) => {
+        const sql = "select id, identifiant, nom, prenom, avatar from fredouil.users;";
+        const connectionObj = new pgClient.Pool({
+            user: process.env.PG_ID,
+            host: process.env.PG_HOST,
+            database: process.env.PG_DB,
+            password: process.env.PG_PWD,
+            port: process.env.PG_PORT
+        });
+
+        connectionObj.connect((err, client, done) => {
+            if (err) {
+                console.log('Error connecting to pg server' + err.stack);
+                reject({ connect: false, response: null });
+            } else {
+                
+                console.log('Connection established / pg db server');
+                client.query(sql,(err, result) => {
+                    
+                    if (err) {
+                        console.log("Erreur lors de l'exécution de la requete sql, vérifiez la syntaxe" + err.stack);
+                        reject({ connect: false, response: { statusMsg: "Connexion échouée" } });
+                    } 
+                    else if (result.rows[0] != null)
+                    {
+                        console.log(result.rows);
+                        resolve({ connect: true, response: {
+                            listUser: result.rows 
+                             }
+                            });
+                    } else {
+                        console.log('Connexion échouée : informations de connexion incorrecte');
+                        resolve({ connect: false, response: { statusMsg: "Connexion échouée" } });
+                    }
+                });
+            }
+        });
+    });
+};
 module.exports = {
     getUser,
     setStatutOnline,
     setStatutOff,
-    getUsersOn
+    getUsersOn,
+    getAllUsers
 };
