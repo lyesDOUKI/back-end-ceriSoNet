@@ -251,12 +251,13 @@ publicationRouter.post("/sharepost", (req, res) =>
         const db = client.db(process.env.NOM_DB);
         const collection = db.collection(process.env.NOM_COLLECTION);
         let createdBy = req.session.userid;
-        let image = req.body.imageURL;
+        let url = req.body.imageURL;
         let hashtags = req.body.hashtags;
         let date = new Date();
         let formatDate = dateUtils.getDate(date);
         let formatHour = dateUtils.getHour(date);
         let body = req.body.shareText;
+
         async function getLastId()
         {
             let lastId = await collection.findOne({_id : {$type:'number'}}, {sort:{_id:-1}});
@@ -267,13 +268,14 @@ publicationRouter.post("/sharepost", (req, res) =>
         id = await getLastId();
         id = Number(id) + 1;
         let postid = req.body.postid;
+        console.log("image !! :  : " + url);
         return collection.insertOne({
             _id : id,
             date : formatDate,
             hour : formatHour,
             body : body,
             createdBy : createdBy,
-            images : {image},
+            images : {url},
             likes : 0,
             hashtags : hashtags,
             shared : postid,
