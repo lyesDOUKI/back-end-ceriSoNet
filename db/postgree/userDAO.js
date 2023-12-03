@@ -38,6 +38,7 @@ function getUser(request) {
                         const heure = dateUtils.getHour(date_co);
                         const finalFormat = date + " " + heure;
                         resolve({ connect: true, response: {
+                            id : result.rows[0].id,
                             identifiant: result.rows[0].identifiant,
                             nom: result.rows[0].nom,
                             prenom: result.rows[0].prenom,

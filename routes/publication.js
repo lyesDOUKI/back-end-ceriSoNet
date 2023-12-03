@@ -314,4 +314,29 @@ publicationRouter.get('/post/:p1', (req, res) =>
     });
 }
 );
+publicationRouter.get('/userPosts/:p1', (req, res) =>
+{
+    
+    const mongodbPromise = mongodb.connect(urlMongodb);
+
+    mongodbPromise.then(client =>
+    {
+        if(client)
+        {
+            //console.log(client);
+        }
+        const db = client.db(process.env.NOM_DB);
+        const collection = db.collection(process.env.NOM_COLLECTION);
+        let id = req.params.p1;
+        id = Number(id);
+        console.log("id : " + id)
+        return collection.find({createdBy : id}).toArray().then((data) => {
+            const parsedData = data.map((item) => new model.Publication(item));
+            console.log("poste trouvé");
+            res.json(parsedData);
+        });
+        
+    });
+}
+);
 module.exports = {publicationRouter};
