@@ -4,19 +4,20 @@ const PATH_TO_HTML = process.env.ROOT + '/index.html';
 const file = require("fs");
 const userDao = require('../db/postgree/userDAO.js');
 const ws = require('../websockets/websockets.js');
-loginRouter.get("/login", (req, res) => {
+const LOGIN = "/login";
+loginRouter.get(LOGIN, (req, res) => {
     file.readFile(PATH_TO_HTML, "utf8", (err) => {
         if (err)
         {
             res.status(500).send("erreur serveur lors de la lecture du fichier html");
             return;
         }
-        console.log("lecture index.html OK");
+        
         res.status(200).sendFile(PATH_TO_HTML);
     }); 
 });
 
-loginRouter.get("/getAllUsers", (req, res)=>
+loginRouter.get(LOGIN + "/getAllUsers", (req, res)=>
 {
     userDao.getAllUsers(req).then(({ connect, response }) => {
         res.status(200).send(response.listUser);
@@ -24,11 +25,10 @@ loginRouter.get("/getAllUsers", (req, res)=>
 }   
 );
 
-loginRouter.post('/login', (req,res) => {
+loginRouter.post(LOGIN, (req,res) => {
     if(req.body.username && req.body.password)
     {
-        console.log("username : " + req.body.username);
-        console.log("mot de passe : " + req.body.password);
+        console.log("dans la route /login");
 	    userDao.getUser(req).then(({ connect, response }) => {
         if (connect) {
             ws.onLogin(req.app.get('io'), response);
@@ -36,7 +36,7 @@ loginRouter.post('/login', (req,res) => {
             console.log("Connexion réussie : ", response);
             if (response) {
                 userDao.setStatutOnline(req).then(({ response }) => {
-                    console.log("statut connexion mis à jour");
+                    
                     
                 });
                 req.session.username = req.body.username;
@@ -57,13 +57,13 @@ loginRouter.post('/login', (req,res) => {
     }
 });
 
-loginRouter.post('/logout', (req, res) => {
+loginRouter.post(LOGIN +'/logout', (req, res) => {
     
    console.log("déconnexion de l'utilisateur : " + req.session.username) 
    const tmpUsername = req.session.username;
    const tmpId = req.session.userid;
    userDao.setStatutOff(tmpId).then(({ response }) => {
-    console.log("statut connexion mis à jour");
+    
     
 });
    req.session.destroy((err) => {
@@ -82,14 +82,14 @@ loginRouter.post('/logout', (req, res) => {
    });
     
 });
-loginRouter.get('/usersOn', (req, res) => {
+loginRouter.get(LOGIN + '/usersOn', (req, res) => {
     userDao.getUsersOn().then(({ connect, response }) => {
-        console.log("connecte : " + connect);
+        
         if (connect) {
-            console.log("liste des utilisateurs connectés : ", response);
+            
             res.status(200).send(response.users);
         } else {
-            console.log(response.users);
+            
             res.status(404).send("aucun utilisateur trouvé");
         }
     })

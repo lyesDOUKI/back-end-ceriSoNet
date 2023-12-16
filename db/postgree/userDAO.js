@@ -31,7 +31,6 @@ function getUser(request) {
                         request.session.isConnected = true;
                         const id = result.rows[0].id;
                         request.session.userid = id;
-                        console.log("id user : " + request.session.userid);
                         request.session.lastLogin = new Date().toISOString();
                         const date_co = new Date()
                         const date = dateUtils.getDate(date_co);
@@ -155,7 +154,6 @@ function getUsersOn(request)
                     } 
                     else
                     {
-                       console.log("récupération des utilisateurs connectés");
                        const tabUserName = [];
                           for(let i = 0; i < result.rows.length; i++)
                           {
@@ -198,7 +196,7 @@ function getAllUsers(req)
                     } 
                     else if (result.rows[0] != null)
                     {
-                        console.log(result.rows);
+                        console.log("recuperation de la liste des utilisateurs OK");
                         resolve({ connect: true, response: {
                             listUser: result.rows 
                              }
