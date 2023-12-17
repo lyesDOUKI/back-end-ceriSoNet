@@ -46,7 +46,7 @@ publicationRouter.get('/publication/userPosts/:p1', (req, res) =>
         let id = req.params.p1;
         id = Number(id);
         
-        return collection.find({createdBy : id}).sort({date : -1}).toArray().then((data) => {
+        return collection.find({createdBy : id}).sort({date : -1}, {hour : -1}).toArray().then((data) => {
             const parsedData = data.map((item) => new model.Publication(item));
             
             res.json(parsedData);
@@ -213,7 +213,7 @@ publicationRouter.get(PUBLICATION + "/:trie", (req, res) =>
         if(trie === "date")
         {
             //filtrer par date et hashtag
-                return collection.find({}).sort({date : -1}).toArray().then((data) => {
+                return collection.find({}).sort({date : -1}, {hour : -1}).toArray().then((data) => {
                     const parsedData = data.map((item) => new model.Publication(item));
         
                     

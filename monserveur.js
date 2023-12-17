@@ -20,16 +20,16 @@ const configSession = require('./db/mongo/session.js');
 const session = require('express-session');
 monserveur.use(session(configSession));
 //configuration des headers et le cross origin et l'envoi des cookies et sessions
-
+/*
 monserveur.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://192.168.2.13:3206');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Access-Control-Allow-Credentials', 'true'); // Permet l'envoi de cookies
   next();
-});
+});*/
 
-//monserveur.use(cors());
+monserveur.use(cors());
 
 const app = https.createServer(options, monserveur);
 
